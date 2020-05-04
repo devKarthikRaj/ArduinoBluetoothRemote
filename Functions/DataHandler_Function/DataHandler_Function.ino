@@ -1,30 +1,33 @@
 /*DataHandler Function
-* This code reads the input states of 2 joysticks, estop and 5 other toggle switches
+*---------------------
+*
+* This code reads the input states of 2 joysticks, estop toggle switch and 4 other generic toggle switches
 * 
-* Then if the user operates the remote (that is move the joysticks or toggle the switches)... 
-* the code will set a transmit flag to indicate that the user has "operated" the remote
+* Then if the user operates the remote (that is, if the user moves the joysticks or toggles the switches)... 
+* the code will set a transmit flag (txFlag) to indicate that the user has "operated" the remote
 * 
-* If the user doesn't touch the remote, the transmit flag is not set;
+* If the user doesn't touch the remote, the txFlag will be low;
+* 
 */
 
 //Emergency Stop 
-int eStop = 7;
+const int eStop = 7;
 
 //Joystick A
-int jsAx = A0;
-int jsAy = A1;
-int jsAs = 12;
+const int jsAx = A0;
+const int jsAy = A1;
+const int jsAs = 12;
 
 //Joystick B
-int jsBx = A2;
-int jsBy = A3;
-int jsBs = 13;
+const int jsBx = A2;
+const int jsBy = A3;
+const int jsBs = 13;
 
 //Toggle Switch
-int tsw1 = 8;
-int tsw2 = 9;
-int tsw3 = 10;
-int tsw4 = 11;
+const int tsw1 = 8;
+const int tsw2 = 9;
+const int tsw3 = 10;
+const int tsw4 = 11;
 
 
 //Array Declarations     //Array Structures
@@ -36,6 +39,7 @@ int txArray[11];         //[eStop, jsAx, jsAy, jsAs, jsBx, jsBy, jsBs, tsw1, tsw
 bool txFlag; //Transmit Flag to alert transmit function that user has changed operated the remote
 
 void setup() {
+  
 	  Serial.begin(9600);
 
     pinMode(jsAx, INPUT);
@@ -67,6 +71,7 @@ void setup() {
     txArray[8] = 0;
     txArray[9] = 0;
     txArray[10] = 0;
+    
 }
 
 void loop() {
@@ -209,15 +214,16 @@ void loop() {
   }
 
   noUserInput:
-                Serial.println(0);
+                //Serial.println(0);
                 return;
 
   userInput: 
-                Serial.println(1);
+                //Serial.println(1);
                 txFlag = true;
                 for(int j=0; j<11;j++)
                 {
                   txArray[j] = inputStateArray[j];
                 }
                 return;
+                
 }

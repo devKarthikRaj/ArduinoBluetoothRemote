@@ -1,27 +1,41 @@
 /*BtConnection Function
+* ---------------------
+* 
 * This code monitors the HC05 state pin
-* The code will turn on an LED if bluetooth connected and 
-* turn off the led if bluetooth disconnected
+* 
+* The code will turn on an LED if bluetooth is connected and ready for data exchange and 
+* turn off the LED if bluetooth is disconnected
+* 
 */
 
-int btStatePin = 4;
-int txLED = 5;
+#define btStatePin 4
+#define connLED 5
+
+int btState;
+
 void setup() {
+  
   Serial.begin(9600);
+  
   pinMode(btStatePin, INPUT);
-  pinMode(txLED, OUTPUT); 
+  pinMode(connLED, OUTPUT);
+   
 }
 
 void loop() {
-  int btState = digitalRead(btStatePin);
+  
+  btState = digitalRead(btStatePin);
+  
   if(btState==0)
   {
     Serial.print(0);
-    digitalWrite(txLED, LOW);
+    digitalWrite(connLED, LOW);
   }
-  if(btState==1)
+  
+  else if(btState==1)
   {
     Serial.print(1);
-    digitalWrite(txLED, HIGH);
+    digitalWrite(connLED, HIGH);
   }
+  
 }

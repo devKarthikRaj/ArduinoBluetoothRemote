@@ -1,18 +1,28 @@
+/* HC05 AT Config
+ * --------------
+ * 
+ * This code can be used to log in to the HC05's AT command mode and configure the HC05 bluetooth module
+ * 
+ */
+
 #include <SoftwareSerial.h>
-#define masterTx 2
-#define masterRx 3
-SoftwareSerial configBt(masterRx, masterTx); // RX, TX
+#define tx 2
+#define rx 3
+SoftwareSerial configBt(rx, tx); // RX, TX
 
 void setup() 
 {
+  
   Serial.begin(38400);
   configBt.begin(38400);
-  pinMode(masterTx, OUTPUT);
-  pinMode(masterRx, INPUT);
+  pinMode(tx, OUTPUT);
+  pinMode(rx, INPUT);
+  
 }
 
 void loop() 
 {
+  
   if(configBt.available()) //if the bluetooth module is sending something...
   {
     Serial.print(configBt.readString()); //print whatever the bluetooth module is sending 
@@ -22,4 +32,5 @@ void loop()
   {
     configBt.write(Serial.read()); //write whatever we typed into the serial monitor input text box to the bluetooth module
   }
+  
 }
