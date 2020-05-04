@@ -11,23 +11,23 @@
 */
 
 //Emergency Stop 
-const int eStop = 7;
+#define eStop 7
 
 //Joystick A
-const int jsAx = A0;
-const int jsAy = A1;
-const int jsAs = 12;
+#define jsAx A0
+#define jsAy A1
+#define jsAs 12
 
 //Joystick B
-const int jsBx = A2;
-const int jsBy = A3;
-const int jsBs = 13;
+#define jsBx A2
+#define jsBy A3
+#define jsBs 13
 
 //Toggle Switch
-const int tsw1 = 8;
-const int tsw2 = 9;
-const int tsw3 = 10;
-const int tsw4 = 11;
+#define tsw1 8
+#define tsw2 9
+#define tsw3 10
+#define tsw4 11
 
 
 //Array Declarations     //Array Structures
@@ -76,7 +76,6 @@ void setup() {
 
 void loop() {
   
-  //Serial.println("Start");
 	inputStateArray[0]  = digitalRead(eStop);
 	inputStateArray[1]  = analogRead(jsAx);
 	inputStateArray[2]  = analogRead(jsAy);
@@ -103,7 +102,7 @@ void loop() {
             break;
     case 1:
             state1:
-                    if(inputStateArray[1] == txArray[1] || inputStateArray[1] == txArray[1]-1 || inputStateArray[1] == txArray[1]+1)
+                    if(inputStateArray[1] == txArray[1] || inputStateArray[1] == txArray[1]-1 || inputStateArray[1] == txArray[1]+1 || inputStateArray[1] == txArray[1]+2 || inputStateArray[1] == txArray[1]-2 || inputStateArray[1] == txArray[1]+3 || inputStateArray[1] == txArray[1]-3 || inputStateArray[1] == txArray[1]+4 || inputStateArray[1] == txArray[1]-4 || inputStateArray[1] == txArray[1]+5 || inputStateArray[1] == txArray[1]-5)                                                            
                     {
                       goto state2;
                     }
@@ -114,7 +113,7 @@ void loop() {
                     break;
     case 2:
             state2:
-                    if(inputStateArray[2] == txArray[2] || inputStateArray[2] == txArray[2]-1 || inputStateArray[2] == txArray[2]+1)
+                    if(inputStateArray[2] == txArray[2] || inputStateArray[2] == txArray[2]-1 || inputStateArray[2] == txArray[2]+1 || inputStateArray[2] == txArray[2]+2 || inputStateArray[2] == txArray[2]-2 || inputStateArray[2] == txArray[2]+3 || inputStateArray[2] == txArray[2]-3 || inputStateArray[2] == txArray[2]+4 || inputStateArray[2] == txArray[2]-4 || inputStateArray[2] == txArray[2]+5 || inputStateArray[2] == txArray[2]-5)
                     {
                       goto state3;
                     }
@@ -136,7 +135,7 @@ void loop() {
                     break;
     case 4:
             state4:
-                    if(inputStateArray[4] == txArray[4] || inputStateArray[4] == txArray[4]-1 || inputStateArray[4] == txArray[4]+1)
+                    if(inputStateArray[4] == txArray[4] || inputStateArray[4] == txArray[4]-1 || inputStateArray[4] == txArray[4]+1 || inputStateArray[4] == txArray[4]+2 || inputStateArray[4] == txArray[4]-2 || inputStateArray[4] == txArray[4]+3 || inputStateArray[4] == txArray[4]-3 || inputStateArray[4] == txArray[4]+4 || inputStateArray[4] == txArray[4]-4 || inputStateArray[4] == txArray[4]+5 || inputStateArray[4] == txArray[4]-5)
                     {
                       goto state5;
                     }
@@ -147,7 +146,7 @@ void loop() {
                     break;
     case 5:
             state5:
-                    if(inputStateArray[5] == txArray[5] || inputStateArray[5] == txArray[5]-1 || inputStateArray[5] == txArray[5]+1)
+                    if(inputStateArray[5] == txArray[5] || inputStateArray[5] == txArray[5]-1 || inputStateArray[5] == txArray[5]+1 || inputStateArray[5] == txArray[5]+2 || inputStateArray[5] == txArray[5]-2 || inputStateArray[5] == txArray[5]+3 || inputStateArray[5] == txArray[5]-3 || inputStateArray[5] == txArray[5]+4 || inputStateArray[5] == txArray[5]-4 || inputStateArray[5] == txArray[5]+5 || inputStateArray[5] == txArray[5]-5)
                     {
                       goto state6;
                     }
@@ -214,11 +213,11 @@ void loop() {
   }
 
   noUserInput:
-                //Serial.println(0);
+                Serial.println(0);
                 return;
 
   userInput: 
-                //Serial.println(1);
+                Serial.println(1);
                 txFlag = true;
                 for(int j=0; j<11;j++)
                 {

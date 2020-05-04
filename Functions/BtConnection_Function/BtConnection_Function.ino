@@ -11,8 +11,6 @@
 #define btStatePin 4
 #define connLED 5
 
-int btState;
-
 void setup() {
   
   Serial.begin(9600);
@@ -24,7 +22,7 @@ void setup() {
 
 void loop() {
   
-  btState = digitalRead(btStatePin);
+  int btState = digitalRead(btStatePin);
   
   if(btState==0)
   {

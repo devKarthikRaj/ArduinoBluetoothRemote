@@ -18,11 +18,11 @@ void setup() {
   
   Serial.begin(9600);
   
-  pinMode(Ax, INPUT);
-  pinMode(Ay, INPUT);
+  pinMode(Ax, INPUT_PULLUP);
+  pinMode(Ay, INPUT_PULLUP);
   pinMode(As, INPUT);
-  pinMode(Bx, INPUT);
-  pinMode(By, INPUT);
+  pinMode(Bx, INPUT_PULLUP);
+  pinMode(By, INPUT_PULLUP);
   pinMode(Bs, INPUT);
 
   digitalWrite(As, HIGH);
