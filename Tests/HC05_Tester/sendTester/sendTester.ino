@@ -1,15 +1,14 @@
 /* Send Tester
 *  -----------
-*  
 *  This code sends an integer value 123 via bluetooth continuously
-*  
 */
 
 #include <SoftwareSerial.h>
+
 #define tx 2
 #define rx 3
-SoftwareSerial bt(rx,tx); //RX, TX
 
+SoftwareSerial bt(rx,tx); //RX, TX
 
 void setup() 
 {
@@ -19,12 +18,10 @@ void setup()
   
   pinMode(tx, OUTPUT);
   pinMode(rx, INPUT);
-  
 }
 
 void loop() 
 {
-  
+ 
   bt.write(123);
-  
 }

@@ -1,13 +1,13 @@
 /* Receive Tester
  * --------------
- *
  *This code prints whatever is received by bluetooth into the Serial Monitor
- *
  */
 
 #include <SoftwareSerial.h>
+
 #define tx 2
 #define rx 3
+
 SoftwareSerial bt(rx, tx); //RX, TX
 
 void setup()
@@ -17,7 +17,6 @@ void setup()
   
   pinMode(tx, OUTPUT);
   pinMode(rx, INPUT);
-  
 }
 
 void loop()
@@ -27,5 +26,4 @@ void loop()
   {
     Serial.println(bt.read());
   }
-  
 }

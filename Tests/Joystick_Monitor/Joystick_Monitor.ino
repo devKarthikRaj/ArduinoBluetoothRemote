@@ -1,8 +1,6 @@
 /*Joystick Monitor
 * ----------------
-* 
 * This code reads the X, Y and switch outputs of 2 joysticks
-* 
 * Use putty as the serial monitor
 */
 
@@ -12,7 +10,6 @@
 #define Bx A2
 #define By A3
 #define Bs 13
-
 
 void setup() {
   
@@ -61,6 +58,5 @@ void loop() {
 
   Serial.print("   ");
 
-  Serial.print("\r");  
-  
+  Serial.print("\r"); 
 } 

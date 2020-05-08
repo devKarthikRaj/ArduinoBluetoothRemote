@@ -1,13 +1,11 @@
 /*Arduino Bluetooth Remote Main Code
 * ----------------------------------
-* 
-* 
+* This code reads the states of 2 joysticks and 5 toggle switches and
+* transmits the values via Bluetooth
 */
 
-//Adding Libraries
 #include <SoftwareSerial.h>
 
-//Pin Declarations
 #define tx         2
 #define rx         3
 #define btStatePin 4
@@ -25,11 +23,10 @@
 #define jsBx      A2
 #define jsBy      A3
 
-//Bluetooth Initial Configuration
 SoftwareSerial bt(rx, tx); //RX, TX
 
-//Variable Declarations
 bool txFlag;
+
 byte tbyte1;
 byte tbyte2;
 byte tbyte3;
@@ -37,20 +34,17 @@ byte tbyte4;
 byte tbyte5;
 byte tbyte6;
 
-//Array Declarations     //Array Structures
+                         //Array Structures
 int inputStateArray[11]; //[eStop, jsAx, jsAy, jsAs, jsBx, jsBy, jsBs, tsw1, tsw2, tsw3, tsw4]
                          //  0      1     2     3     4     5     6    7     8      9     10    
-int txArray[11];         //[eStop, jsAx, jsAy, jsAs, jsBx, jsBy, jsBs, tsw1, tsw2, tsw3, tsw4]
-                         //  0      1     2     3     4     5     6    7     8      9     10   
+int txArray[11];         //same structure as inputStateArray  
 
 
 void setup() {
 
-  //Baud Rate Settings
   Serial.begin(9600);
   bt.begin(9600);
 
-  //IO Definitions 
   pinMode(tx, OUTPUT);
   pinMode(rx, INPUT);
   pinMode(btStatePin, INPUT);
@@ -68,30 +62,42 @@ void setup() {
   pinMode(tsw3, INPUT);
   pinMode(tsw4, INPUT);
 
-  //Setting inital pin states to read joystick push button state
+  //the input pins reading the joystick push button state have to be set to high, if not the IO pins will be floating
   digitalWrite(jsAs, HIGH); 
   digitalWrite(jsBs, HIGH); 
-  
 }
 
 void loop() {
 
-  while(BtConnection() == 0) //while bluetooth is not connected
+  while(BtConnection() == 0) 
   {
-    ; //do nothing 
+    ; 
   }
 
-  //if bluetooth is connected... continue...
   DataHandler();
-  Serial.println(txFlag);
+  
   if(txFlag == true)
   {
     FormatData();
     TransmitData();
   }
-  Serial.println(txFlag);
+
+  //for debugging only 
+  //----------------------------
+  for(int a=0; a<11; a++)
+  {
+    Serial.println(txArray[a]);
+  }
+  Serial.println("------------");
+  //-----------------------------
 }
 
+/*  BtConnection Function
+ *  ---------------------
+ *  This function monitors the Bluetooth connection state
+ *  Turns on an LED and returns 1 if Bluetooth connected
+ *  Turns of an LED and returns 0 if Bluetooth disconnected
+ */
 int BtConnection() {
 
   int btState = digitalRead(btStatePin);
@@ -107,11 +113,17 @@ int BtConnection() {
   }
 
   return btState;
-  
 }
 
+/*  Data Handler Function
+ *  ---------------------
+ *  This function reads the state of the 2 joysticks and 5 toggle switches 
+ *  If the user has not operated the remote, the function is terminated
+ *  If the user has operated the remote, the function detects this 
+ *  and sets the txFlag so that the data is formatted and transmitted
+ */
 void DataHandler() {
-
+  
   inputStateArray[0]  = digitalRead(eStop);
   inputStateArray[1]  = analogRead(jsAx);
   inputStateArray[2]  = analogRead(jsAy);
@@ -123,7 +135,18 @@ void DataHandler() {
   inputStateArray[8]  = digitalRead(tsw2);
   inputStateArray[9]  = digitalRead(tsw3);
   inputStateArray[10] = digitalRead(tsw4);
-  
+
+  /* State Machine
+   * -------------
+   * This state machine determines if the user has operated the remote
+   * 
+   * The current values of the joystick and toggle switch input states [stored in inputStateArray] 
+   * are compared with the previous input state values [stored in txArray]
+   * 
+   * If the values are the same, user has not operated the remote ---> terminate function
+   * If the values are different, user has operated the remote ---> update values txArray values with the current
+   * values from inputStateArray and set the txFlag
+   */
   switch(0)
   {
     case 0:
@@ -249,20 +272,22 @@ void DataHandler() {
   }
 
   noUserInput:
-                //Serial.println(0);
                 return;
 
   userInput: 
-                //Serial.println(1);
                 txFlag = true;
                 for(int j=0; j<11;j++)
                 {
                   txArray[j] = inputStateArray[j];
                 }
-                return;
-                
+                return;               
 }
-
+/* Format Data Function 
+ * --------------------
+ * The function controls how the input state data is being sent over Bluetooth
+ * The input state data is compressed into 6 bytes (transmit bytes or tbytes!) 
+ * [refer to "Reference/Arduino Bluetooth Remote tbyte Format Legend.xlsx" for how the values are mapped] 
+ */
 void FormatData() {
 
   //format tbyte1
@@ -309,8 +334,6 @@ void FormatData() {
     bitWrite(tbyte3, m, bitRead(txArray[4],m-6)); 
   }
 
-  //stuff
-
   //format tbyte4
   //-------------
 
@@ -345,10 +368,15 @@ void FormatData() {
   for(int q=3; q<8; q++)
   {
     bitWrite(tbyte6, q, bitRead(txArray[q+4], 0));
-  }
-  
+  }  
 }
 
+/* Transmit Data Function
+ * ----------------------
+ * This function transmits the 6 tbytes via Bluetooth,
+ * turns on an LED while transmission is ongoing
+ * and clears the txFlag to indicate that transmission completed
+ */
 void TransmitData() {
 
   digitalWrite(txLED, HIGH);
@@ -360,5 +388,4 @@ void TransmitData() {
   bt.write(tbyte6);
   txFlag = false;
   digitalWrite(txLED, LOW);
-  
 }
