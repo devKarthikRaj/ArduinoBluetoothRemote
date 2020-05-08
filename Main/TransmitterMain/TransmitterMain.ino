@@ -84,11 +84,22 @@ void loop() {
 
   //for debugging only 
   //----------------------------
+  
   for(int a=0; a<11; a++)
   {
     Serial.println(txArray[a]);
   }
   Serial.println("------------");
+  
+  /*
+  Serial.println(tbyte1);
+  Serial.println(tbyte2);
+  Serial.println(tbyte3);
+  Serial.println(tbyte4);
+  Serial.println(tbyte5);
+  Serial.println(tbyte6);
+  Serial.println("---------------");
+  */
   //-----------------------------
 }
 
